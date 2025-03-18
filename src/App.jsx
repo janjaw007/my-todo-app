@@ -13,6 +13,10 @@ function App() {
 
   console.log(tasks);
 
+  function handleDeleteTask(id) {
+    setTasks((tasks) => tasks.filter((task) => task.id !== id));
+  }
+
   return (
     <div className="App">
       <Header />
@@ -22,7 +26,7 @@ function App() {
         <AddTaskForm setTasks={setTasks} setIsAddTask={setIsAddTask} />
       )}
 
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} handleDeleteTask={handleDeleteTask} />
     </div>
   );
 }
