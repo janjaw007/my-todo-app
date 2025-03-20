@@ -1,24 +1,28 @@
-import { useState } from "react";
-
-function AddTaskForm({ setTasks, setIsAddTask }) {
-  const [taskName, setTaskName] = useState("");
-
+function AddTaskForm({
+  editTaskId,
+  setTasks,
+  setIsAddTask,
+  taskName,
+  setTaskName,
+  setEditTaskId,
+}) {
   function handleAddTask(e) {
     e.preventDefault();
 
+    // if empty nothing to add
     if (!taskName.trim()) return;
 
-    setTasks((tasks) => [
-      ...tasks,
-      {
-        id: Date.now(),
-        text: taskName,
-        done: false,
-      },
-    ]);
+    setTasks((tasks) =>
+      editTaskId
+        ? tasks.map((task) =>
+            task.id === editTaskId ? { ...task, text: taskName } : task
+          )
+        : [...tasks, { id: Date.now(), text: taskName, done: false }]
+    );
 
     setTaskName("");
-    setIsAddTask(false);
+    setEditTaskId(null); // Reset after editing
+    setIsAddTask((state) => !state);
   }
 
   return (
@@ -27,6 +31,7 @@ function AddTaskForm({ setTasks, setIsAddTask }) {
       <input
         type="text"
         name="taskName"
+        value={taskName}
         onChange={(e) => setTaskName(e.target.value)}
       />
       <button type="submit">add</button>
