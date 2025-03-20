@@ -1,4 +1,4 @@
-function TaskFilter({ setIsAddTask }) {
+function TaskFilter({ setIsAddTask, setFilterStatus }) {
   function handleAddTask() {
     setIsAddTask((state) => !state);
   }
@@ -8,10 +8,10 @@ function TaskFilter({ setIsAddTask }) {
       <button className="btn-add" onClick={handleAddTask}>
         Add Task
       </button>
-      <select name="" id="">
-        <option value="All">All</option>
-        <option value="done">done</option>
-        <option value="undone">undone</option>
+      <select onChange={(e) => setFilterStatus(e.target.value)}>
+        <option value="null">All</option>
+        <option value="true">Done</option>
+        <option value="false">Undone</option>
       </select>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "./components/Header";
 import TaskFilter from "./components/TaskFilter";
@@ -10,6 +10,8 @@ function App() {
   const [taskName, setTaskName] = useState("");
   const [editTaskId, setEditTaskId] = useState(null);
   const [isAddTask, setIsAddTask] = useState(false);
+  const [filterTasks, setFilterTasks] = useState([]);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   function handleAddTask(e) {
     e.preventDefault();
@@ -55,10 +57,30 @@ function App() {
     );
   }
 
+  useEffect(
+    function () {
+      switch (filterStatus) {
+        case "true":
+          setFilterTasks(tasks.filter((task) => task.done === true));
+          break;
+        case "false":
+          setFilterTasks(tasks.filter((task) => task.done === false));
+          break;
+        default:
+          setFilterTasks(tasks);
+          break;
+      }
+    },
+    [filterStatus, tasks]
+  );
+
   return (
     <div className="App">
       <Header />
-      <TaskFilter setIsAddTask={setIsAddTask} />
+      <TaskFilter
+        setIsAddTask={setIsAddTask}
+        setFilterStatus={setFilterStatus}
+      />
       {isAddTask && (
         <AddTaskForm
           handleAddTask={handleAddTask}
@@ -68,7 +90,7 @@ function App() {
       )}
 
       <TaskList
-        tasks={tasks}
+        tasks={filterTasks}
         handleDeleteTask={handleDeleteTask}
         handleEditTask={handleEditTask}
         handleDoneTask={handleDoneTask}
